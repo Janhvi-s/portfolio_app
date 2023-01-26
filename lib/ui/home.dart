@@ -5,6 +5,7 @@ import 'package:portfolio_app/constants/strings.dart';
 import 'package:portfolio_app/constants/text_styles.dart';
 import 'package:portfolio_app/models/education.dart';
 import 'package:portfolio_app/models/experience.dart';
+import 'package:portfolio_app/models/projects.dart';
 import 'package:portfolio_app/utils/screen/screen_utils.dart';
 import 'package:portfolio_app/widgets/responsive_widget.dart';
 import 'dart:html' as html;
@@ -221,6 +222,8 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 24.0),
                 _buildEducation(),
                 const SizedBox(height: 24.0),
+                _buildProjects(),
+                const SizedBox(height: 24.0),
                 _buildSkills(context),
               ],
             )
@@ -278,23 +281,29 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildSkillsAndEducation(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: _buildExperience(),
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: _buildExperience(),
+            ),
+            const SizedBox(width: 40.0),
+            Expanded(
+              flex: 1,
+              child: _buildEducation(),
+            ),
+            const SizedBox(width: 40.0),
+            Expanded(
+              flex: 1,
+              child: _buildSkills(context),
+            ),
+          ],
         ),
-        const SizedBox(width: 40.0),
-        Expanded(
-          flex: 1,
-          child: _buildEducation(),
-        ),
-        const SizedBox(width: 40.0),
-        Expanded(
-          flex: 1,
-          child: _buildSkills(context),
-        ),
+        SizedBox(height: ResponsiveWidget.isSmallScreen(context) ? 12.0 : 30.0),
+        _buildProjects(),
       ],
     );
   }
@@ -446,7 +455,7 @@ class HomePage extends StatelessWidget {
 
   final educationList = [
     Education(
-      "B.Tech in CSE (AI/ML)",
+      "B.Tech in CSE",
       "Vellore Institute of Technology, Bhopal",
       "June 2019",
       "Present",
@@ -530,6 +539,95 @@ class HomePage extends StatelessWidget {
     );
   }
 
+
+  final projectsList = [
+    Projects(
+      "Time Series Forecast for User's Cloud Data Consumption",
+      "A web application in the ML domain that uses Time Series Forecasting to predict a user's cloud data consumption while using different SaaS Services.",
+      "https://github.com/Janhvi-s/HPE_CTY_data_consumption_tsa",
+    ),
+    Projects(
+      "AI Radio App",
+      "A Radio App with an integrated AI-powered - Voice assistant, made using Flutter which helps the user to play genre-specific songs.",
+      "https://github.com/Janhvi-s/RadioApp",
+    ),
+    Projects(
+      "StayFit",
+      "An ML-powered Yoga app (for MLOps for Good Hackathon) that detects the user's yoga pose in their daily yoga routine and are rewarded with our in-app tokens",
+      "https://github.com/Janhvi-s/StayFit",
+    ),
+  ];
+
+  Widget _buildProjects() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _buildProjectsContainerHeading(),
+        _buildProjectsSummary(),
+        const SizedBox(height: 8.0),
+        _buildProjectsTimeline(),
+      ],
+    );
+  }
+
+  Widget _buildProjectsContainerHeading() {
+    return Text(
+      Strings.projects,
+      style: TextStyles.subHeading.copyWith(
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _buildProjectsSummary() {
+    return Text(
+      "My projects range in app development and AI-ML domain.",
+      style: TextStyles.body,
+    );
+  }
+
+  Widget _buildProjectsTimeline() {
+    final List<Widget> widgets = projectsList
+        .map((project) => _buildProjectsTile(project))
+        .toList();
+    return Column(children: widgets);
+  }
+
+  Widget _buildProjectsTile(Projects project) {
+    Color color = const Color(0xFF45405B);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            project.name,
+            style: TextStyles.company.copyWith(
+              color: color,
+            ),
+          ),
+          Text(
+            project.description,
+            style: TextStyles.body.copyWith(
+              color: color,
+            ),
+          ),
+          GestureDetector(
+            child: Text(
+              "Project Link",
+              style: TextStyles.body.copyWith(
+                color: Colors.blue.shade800,
+              ),
+            ),
+            onTap: () {
+              html.window
+                  .open(project.link, "Project Link");
+            },
+          )
+        ],
+      ),
+    );
+  }
 
   Widget _buildFooter(BuildContext context) {
     return Column(
