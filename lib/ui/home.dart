@@ -446,7 +446,7 @@ class HomePage extends StatelessWidget {
 
   final educationList = [
     Education(
-      "B.Tech in CSE (AI/ML)",
+      "B.Tech in CSE",
       "Vellore Institute of Technology, Bhopal",
       "June 2019",
       "Present",
